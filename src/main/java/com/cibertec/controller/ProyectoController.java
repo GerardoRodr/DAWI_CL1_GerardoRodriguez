@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -45,19 +46,19 @@ public class ProyectoController {
 	
     @GetMapping("/consulta")
     public String consulta(Model model) {
-        List<Cliente> clientes = repo.findAll();
-        model.addAttribute("clientes", clientes);
+        model.addAttribute("lstClientes", repo.findAll());
         return "APP-RODRIGUEZMONZON-CONSULTA";
     }
     
-    @GetMapping("/consulta/{id}")
-    public String consultaPorId(@PathVariable String id, Model model) {
-        Optional<Cliente> cliente = repo.findById(id);
-        if (cliente.isPresent()) {
-            model.addAttribute("cliente", cliente.get());
-            return "APP-RODRIGUEZMONZON-DETALLE";
-        } else {
-            return "redirect:/consulta";
-        }
-    }
+    @GetMapping("/consultaId")
+	public String consulta(@RequestParam("id_cliente") String id_cliente, Model model) {
+	    Optional<Cliente> clienteEncontrado = repo.findById(id_cliente);
+	    if (clienteEncontrado.isPresent()) {
+	        model.addAttribute("clienteEncontrado", clienteEncontrado.get());
+	    } else {
+	        model.addAttribute("mensaje", "No se encontró ningún cliente con ese ID.");
+	    }
+	    model.addAttribute("cliente", new Cliente());
+	    return "APP-RODRIGUEZMONZON-CONSULTA";
+	}
 }
