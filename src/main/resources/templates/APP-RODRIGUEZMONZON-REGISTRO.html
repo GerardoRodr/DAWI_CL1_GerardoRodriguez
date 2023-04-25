@@ -1,53 +1,69 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
+
 <head>
 	<title>Registro de clientes</title>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
+
 <body class="m-4">
 
-<h1>Registro de Cliente</h1>
+	<h1>Registro de Cliente</h1>
 
-<form th:action="@{/grabar}" th:object="${cliente}" method="post">
-  <div class="form-group">
-    <label for="nom_cliente">Nombre del cliente</label>
-    <input th:field="*{nom_cliente}" type="text" class="form-control" id="nom_cliente" placeholder="Introduce el nombre del cliente" required>
-  </div>
-  <div class="form-group">
-    <label for="id_area">Area</label>
-    <select th:field="*{id_area}" class="form-control" id="id_area" required>
-      <option value="-1">Selecciona una opción</option>
-      <option value="1">Computadoras</option>
-      <option value="2">Equipos</option>
-      <option value="3">Monitores</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="dni_cliente">DNI del cliente</label>
-    <input th:field="*{dni_cliente}" type="text" class="form-control" id="dni_cliente" placeholder="Introduce el DNI del cliente" required>
-  </div>
-  <div class="form-group">
-    <label for="edad_cliente">Edad del cliente</label>
-    <input th:field="*{edad_cliente}" type="text" class="form-control" id="edad_cliente" placeholder="Introduce la edad del cliente" required>
-  </div>
-  <div class="form-group">
-    <label for="genero_cliente">Género del cliente</label>
-    <select th:field="*{genero_cliente}" class="form-control" id="genero_cliente" required>
-      <option value="-1">Selecciona una opción</option>
-      <option value="M">Masculino</option>
-      <option value="F">Femenino</option>
-    </select>
-  </div>
-  <button type="submit" class="btn btn-primary">Registrar cliente</button>
-</form>
-<div class="btn-toolbar mt-4" role="toolbar" aria-label="Botonera">
-  <div class="btn-group mr-2" role="group" aria-label="Botón Volver">
-    <button type="button" class="btn btn-secondary" onclick="window.location.href='/listar'">Listado</button>
-  </div>
-  <div class="btn-group mr-2" role="group" aria-label="Botón Buscar">
-    <button type="button" class="btn btn-primary">Buscar</button>
-  </div>
-</div>
+	<div th:if="${mensaje}" class="alert alert-success">
+		<p class="m-0" th:text="${mensaje}"></p>
+	</div>
+
+	<form th:action="@{/grabar}" th:object="${cliente}" method="post">
+		<div class="form-group">
+			<label for="nom_cliente">Nombre del cliente</label>
+			<input th:field="*{nom_cliente}" type="text" class="form-control" id="nom_cliente"
+				placeholder="Introduce el nombre del cliente" required>
+		</div>
+		<div class="form-group">
+			<label for="id_area">Area</label>
+			<select th:field="*{id_area}" class="form-control" id="id_area" required>
+				<option value="-1">Selecciona una opción</option>
+				<option value="1">Computadoras</option>
+				<option value="2">Equipos</option>
+				<option value="3">Monitores</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="dni_cliente">DNI del cliente</label>
+			<input pattern="\d{8}" th:field="*{dni_cliente}" type="text" class="form-control" id="dni_cliente"
+				placeholder="Introduce el DNI del cliente" required>
+		</div>
+		<div class="form-group">
+			<label for="edad_cliente">Edad del cliente</label>
+			<input th:field="*{edad_cliente}" type="text" class="form-control" id="edad_cliente"
+				placeholder="Introduce la edad del cliente" required>
+		</div>
+		<div class="form-group">
+			<label for="genero_cliente">Género del cliente</label>
+			<select th:field="*{genero_cliente}" class="form-control" id="genero_cliente" required>
+				<option value="-1">Selecciona una opción</option>
+				<option value="M">Masculino</option>
+				<option value="F">Femenino</option>
+			</select>
+		</div>
+		<button type="submit" class="btn btn-primary">Registrar cliente</button>
+	</form>
+	<div class="btn-toolbar mt-4 d-flex align-items-center justify-content-center" role="toolbar" aria-label="Botonera">
+		<div class="btn-group mr-2" role="group" aria-label="Botón Volver">
+			<button type="button" class="btn btn-secondary" onclick="window.location.href='/listar'">Listado</button>
+		</div>
+		<div class="btn-group mr-2" role="group" aria-label="Botón Buscar">
+			<button type="button" class="btn btn-primary"
+				onclick="window.location.href='/buscarCliente'">Buscar Cliente</button>
+		</div>
+		<div class="btn-group mr-2" role="group" aria-label="Botón Buscar">
+			<button type="button" class="btn btn-primary"
+				onclick="window.location.href='/consultarClienteArea'">Buscar Area por Cliente</button>
+		</div>
+	</div>
 </body>
+
 </html>

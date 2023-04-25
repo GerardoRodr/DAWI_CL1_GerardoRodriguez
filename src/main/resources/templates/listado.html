@@ -1,46 +1,56 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
+
 <head>
 	<title>Listado</title>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
+
 <body class="m-4">
 
-<h1>Listado de Clientes</h1>
+	<h1>Listado de Clientes</h1>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>ID Cliente</th>
-      <th>Nombre Cliente</th>
-      <th>ID Área</th>
-      <th>DNI Cliente</th>
-      <th>Edad Cliente</th>
-      <th>Género Cliente</th>
-    </tr>
-  </thead>
-  <tbody>
-	<th:block th:each="c : ${lstClientes}">
-    <tr>
-      <td th:text="${c.id_cliente}"></td>
-      <td th:text="${c.nom_cliente}"></td>
-      <td th:text="${c.id_area}"></td>
-      <td th:text="${c.dni_cliente}"></td>
-      <td th:text="${c.edad_cliente}"></td>
-      <td th:text="${c.genero_cliente}"></td>
-    </tr>
-    </th:block>
-  </tbody>
-</table>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>ID Cliente</th>
+				<th>Nombre Cliente</th>
+				<th>ID Área</th>
+				<th>DNI Cliente</th>
+				<th>Edad Cliente</th>
+				<th>Género Cliente</th>
+			</tr>
+		</thead>
+		<tbody>
+			<th:block th:each="c : ${lstClientes}">
+				<tr>
+					<td th:text="${c.id_cliente}"></td>
+					<td th:text="${c.nom_cliente}"></td>
+					<td th:text="${c.id_area}"></td>
+					<td th:text="${c.dni_cliente}"></td>
+					<td th:text="${c.edad_cliente}"></td>
+					<td th:text="${c.genero_cliente}"></td>
+				</tr>
+			</th:block>
+		</tbody>
+	</table>
 
-<div class="btn-toolbar" role="toolbar" aria-label="Botonera">
-  <div class="btn-group mr-2" role="group" aria-label="Botón Volver">
-    <button type="button" class="btn btn-secondary" onclick="window.location.href='/'">Volver al registro</button>
-  </div>
-  <div class="btn-group mr-2" role="group" aria-label="Botón Buscar">
-    <button type="button" class="btn btn-primary">Buscar</button>
-  </div>
-</div>
+	<div class="btn-toolbar d-flex align-items-center justify-content-center" role="toolbar" aria-label="Botonera">
+		<div class="btn-group mr-2" role="group" aria-label="Botón Volver">
+			<button type="button" class="btn btn-secondary" onclick="window.location.href='/'">Volver al
+				registro</button>
+		</div>
+		<div class="btn-group mr-2" role="group" aria-label="Botón Buscar">
+			<button type="button" class="btn btn-primary"
+				onclick="window.location.href='/buscarCliente'">Buscar</button>
+		</div>
+		<div class="btn-group mr-2" role="group" aria-label="Botón Buscar">
+			<button type="button" class="btn btn-primary"
+				onclick="window.location.href='/consultarClienteArea'">Buscar Area por Cliente</button>
+		</div>
+	</div>
 </body>
+
 </html>

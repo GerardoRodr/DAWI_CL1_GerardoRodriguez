@@ -1,18 +1,19 @@
 package com.cibertec.controller;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.cibertec.model.AreaCliente;
 import com.cibertec.model.Cliente;
 import com.cibertec.repository.IClienteRepository;
 
@@ -21,6 +22,10 @@ public class ProyectoController {
 	@Autowired
 	private IClienteRepository repo;
 	
+	@Autowired
+    private JdbcTemplate jdbcTemplate;
+	
+	//La pagina principal sera la de registro
 	@GetMapping("/")
 	public String regPag(Model model) {
 		model.addAttribute("cliente", new Cliente());
@@ -28,14 +33,11 @@ public class ProyectoController {
 	}
 	
 	@PostMapping("/grabar")
-	public String regcliente(@ModelAttribute Cliente cliente, RedirectAttributes redirectAttrs) {
+	public String regcliente(@ModelAttribute Cliente cliente, Model model) {
 		System.out.println(cliente);
 		repo.save(cliente);
-		// Mensaje de confirmación para mostrar en la página de destino
-	    redirectAttrs.addFlashAttribute("mensaje", "El cliente se ha registrado correctamente");
-	    
-	    
-		return "redirect:/listar";
+		model.addAttribute("mensaje", "Se registró el cliente correctamente.");
+		return "APP-RODRIGUEZMONZON-REGISTRO";
 	}
 	
 	@GetMapping("/listar")
@@ -44,21 +46,52 @@ public class ProyectoController {
 		return "listado";
 	}
 	
-    @GetMapping("/consulta")
-    public String consulta(Model model) {
-        model.addAttribute("lstClientes", repo.findAll());
+	@GetMapping("/buscarCliente")
+	  public String buscarClientePorId(Model model) {
+	    model.addAttribute("cliente", new Cliente());
+	    return "APP-RODRIGUEZMONZON-CONSULTACLIENTE";
+	  }
+	
+	@PostMapping("/buscarCliente")
+	  public String buscarClientePorId(@ModelAttribute Cliente cliente, Model model) {
+	    Cliente clienteEncontrado = repo.findById(String.valueOf(cliente.getId_cliente())).orElse(null);
+	    if (clienteEncontrado == null) {
+	      model.addAttribute("mensaje", "No se encontró ningún cliente con ese ID.");
+	    } else {
+	      model.addAttribute("clienteEncontrado", clienteEncontrado);
+	    }
+	    return "APP-RODRIGUEZMONZON-CONSULTACLIENTE";
+	  }
+	
+	@GetMapping("/consultarClienteArea")
+    public String areaClienteForm() {
         return "APP-RODRIGUEZMONZON-CONSULTA";
     }
-    
-    @GetMapping("/consultaId")
-	public String consulta(@RequestParam("id_cliente") String id_cliente, Model model) {
-	    Optional<Cliente> clienteEncontrado = repo.findById(id_cliente);
-	    if (clienteEncontrado.isPresent()) {
-	        model.addAttribute("clienteEncontrado", clienteEncontrado.get());
-	    } else {
-	        model.addAttribute("mensaje", "No se encontró ningún cliente con ese ID.");
-	    }
-	    model.addAttribute("cliente", new Cliente());
-	    return "APP-RODRIGUEZMONZON-CONSULTA";
-	}
+
+    @PostMapping("/consultarClienteArea")
+    public String areaClienteSubmit(@RequestParam("idCliente") int idCliente, Model model) {
+    	List<AreaCliente> areaClientes = new ArrayList<>();
+    	
+    	try {
+			List<Map<String, Object>> rows = jdbcTemplate.queryForList("CALL areasFromIdCliente(?)", idCliente);
+			rows.forEach(row -> {
+				AreaCliente areaCliente = new AreaCliente();
+				areaCliente.setNombreArea((String) row.get("nom_area"));
+				areaCliente.setCantidadClientesArea((Integer) row.get("cant_clien_area"));
+				areaCliente.setIdCliente((Integer) row.get("id_cliente"));
+				areaCliente.setNombreCliente((String) row.get("nom_cliente"));
+				areaClientes.add(areaCliente);
+			});
+			
+			if (areaClientes.isEmpty()) {
+	            model.addAttribute("error", "No se encontraron resultados para la ID de cliente proporcionada.");
+	        } else {
+	            model.addAttribute("areaClientes", areaClientes);
+	        }
+		} catch (Exception e) {
+			model.addAttribute("error", "Error al buscar áreas de cliente: " + e.getMessage());
+		}
+
+        return "APP-RODRIGUEZMONZON-CONSULTA";
+    }
 }

@@ -1,30 +1,72 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-	<title>Registro de clientes</title>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta charset="UTF-8">
+	<title>Área del Cliente</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
 </head>
-<body class="m-4">
 
-<div class="container mt-5">
-    <h1 class="text-center mb-4">Consulta de cliente</h1>
-    <form th:action="@{/consultaId}" th:object="${cliente}" method="get">
-        <div class="form-group">
-            <label for="id_cliente">ID de cliente:</label>
-            <input type="text" class="form-control" id="id_cliente" name="id_cliente" />
-        </div>
-        <button type="submit" class="btn btn-primary">Consultar</button>
-    </form>
-</div>
+<body>
 
-<div class="btn-toolbar mt-4" role="toolbar" aria-label="Botonera">
-  <div class="btn-group mr-2" role="group" aria-label="Botón Volver">
-    <button type="button" class="btn btn-secondary" onclick="window.location.href='/listar'">Listado</button>
-  </div>
-  <div class="btn-group mr-2" role="group" aria-label="Botón Buscar">
-    <button type="button" class="btn btn-primary">Buscar</button>
-  </div>
-</div>
+	<h1 class="ml-4 mt-3">Busqueda de Cliente/Area</h1>
+
+	<div class="container">
+		<div class="row justify-content-center mt-5">
+			<div class="col-md-6">
+				<form method="post" action="#" th:action="@{/consultarClienteArea}" th:object="${idCliente}">
+					<div class="form-group">
+						<label for="idCliente">ID del Cliente:</label>
+						<input type="number" class="form-control" id="idCliente" name="idCliente"
+							placeholder="Ingresa el ID del Cliente" required />
+					</div>
+					<button type="submit" class="btn btn-primary">Consultar</button>
+				</form>
+			</div>
+		</div>
+
+		<div th:if="${error}" class="alert alert-danger mt-3 mx-5" role="alert">
+			<p class="mb-0" th:text="${error}"></p>
+		</div>
+
+
+		<div class="row justify-content-center mt-5" th:if="${not #lists.isEmpty(areaClientes)}">
+			<div class="col-md-8">
+				<h2>Resultados:</h2>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>ID del Cliente</th>
+							<th>Nombre del Cliente</th>
+							<th>Área</th>
+							<th>Cantidad de Clientes</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="areaCliente : ${areaClientes}">
+							<td th:text="${areaCliente.idCliente}"></td>
+							<td th:text="${areaCliente.nombreCliente}"></td>
+							<td th:text="${areaCliente.nombreArea}"></td>
+							<td th:text="${areaCliente.cantidadClientesArea}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="btn-toolbar mt-4 d-flex align-items-center justify-content-center" role="toolbar" aria-label="Botonera">
+		<div class="btn-group mr-2" role="group" aria-label="Botón Volver al Listado">
+			<button type="button" class="btn btn-secondary" onclick="window.location.href='/listar'">Listado</button>
+		</div>
+		<div class="btn-group mr-2" role="group" aria-label="Botón Volver al Registro">
+			<button type="button" class="btn btn-primary" onclick="window.location.href='/'">Volver al registro</button>
+		</div>
+		<div class="btn-group mr-2" role="group" aria-label="Botón Buscar">
+			<button type="button" class="btn btn-primary"
+				onclick="window.location.href='/buscarCliente'">Buscar Cliente por id</button>
+		</div>
+	</div>
 </body>
+
 </html>
